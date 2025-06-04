@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.5">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="zh-Hant"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;重大傷病試算表&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body { font-family: Arial, sans-serif; margin: 40px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>label, input, select { display: block; margin: 10px 0; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>table, th, td { border: 1px solid #ccc; border-collapse: collapse; padding: 8px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h2&gt;重大傷病保險試算&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;form id="calcForm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;生日（YYYYMMDD）：&lt;input type="text" id="birth" required&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;性別：</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;select id="gender"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option value="1"&gt;男&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option value="2"&gt;女&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;保額（萬元）：&lt;input type="number" id="amount" required&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button type="submit"&gt;開始試算&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/form&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h3&gt;結果&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="result"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function calcInsuranceAge(birthdayStr) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const today = new Date();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const y = parseInt(birthdayStr.slice(0, 4));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const m = parseInt(birthdayStr.slice(4, 6)) - 1;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const d = parseInt(birthdayStr.slice(6, 8));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const birthDate = new Date(y, m, d);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let age = today.getFullYear() - birthDate.getFullYear();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const halfYearAfterBirthday = new Date(birthDate);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>halfYearAfterBirthday.setMonth(birthDate.getMonth() + 6);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (today &gt;= halfYearAfterBirthday) age += 1;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return age;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// 模擬查表資料（可替換成實際 Excel 匯出的 JSON 結構）</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const lookupTable = {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"1-30": 0.045,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"1-37": 0.048,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"2-30": 0.043,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"2-37": 0.0465,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>// 可繼續擴充更多條件組合...</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function getRateFromTable(gender, age) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const key = `${gender}-${age}`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return lookupTable[key] || 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("calcForm").addEventListener("submit", function(e) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>e.preventDefault();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const birth = document.getElementById("birth").value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const gender = document.getElementById("gender").value;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const amount = parseFloat(document.getElementById("amount").value);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const age = calcInsuranceAge(birth);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const rate = getRateFromTable(gender, age);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const payout = amount * 10000 * rate;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.getElementById("result").innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;tr&gt;&lt;th&gt;保險年齡&lt;/th&gt;&lt;td&gt;${age} 歲&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;tr&gt;&lt;th&gt;揭露利率（查表）&lt;/th&gt;&lt;td&gt;${(rate * 100).toFixed(2)}%&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;tr&gt;&lt;th&gt;年揭露金額&lt;/th&gt;&lt;td&gt;${payout.toLocaleString()} 元&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
